@@ -15,7 +15,8 @@ fetch('/files')
 .then(data => {
     const div = document.getElementById('files');
     data.forEach(file => {
-        div.innerHTML += `<a href="/DOCUMENTS/${file}" target="_blank">${file}</a><br>`;
+        const name = file.split('/').pop();
+        div.innerHTML += `<a href="${file}" target="_blank">${name}</a><br>`;
     });
 });
 </script>

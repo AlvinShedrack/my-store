@@ -1,49 +1,54 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const app = express();
-app.use(express.static('public'));
-app.use('/DOCUMENTS', express.static('DOCUMENTS'));
 
+app.use(express.static('public'));
 app.use(express.json());
 
-// simple login
-const USER = "admin";
-const PASS = "1234";
+// Cloudinary config
+cloudinary.config({
+  cloud_name: 'dpsao38cv',
+  api_key: '567278857625978',
+  api_secret: 'RA0t08BgAxCHk9sUtyEUVW5ZZlA'
+});
 
+// login
 app.post('/login', (req, res) => {
-    const {username, password} = req.body;
-    if(username === USER && password === PASS){
-        res.json({success:true});
-    }else{
-        res.json({success:false});
-    }
+  const { username, password } = req.body;
+  res.json({ success: username === 'admin' && password === '1234' });
 });
 
-// upload setup
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'DOCUMENTS/')
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname))
-    }
+// storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    return {
+      folder: 'documents',
+      resource_type: 'raw',
+      public_id: file.originalname,
+      access_mode: 'public'
+    };
+  }
 });
 
-const upload = multer({storage});
+const upload = multer({ storage });
 
-app.post('/upload', upload.single('file'), (req, res)=>{
-    res.json({success:true});
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.json({ success: true, url: req.file.path });
 });
 
-app.get('/files', (req,res)=>{
-    fs.readdir('DOCUMENTS', (err, files)=>{
-        res.json(files);
-    });
+app.get('/files', async (req, res) => {
+  const result = await cloudinary.api.resources({
+    type: 'upload',
+    prefix: 'documents',
+    resource_type: 'raw'
+  });
+
+  const files = result.resources.map(file => file.secure_url);
+  res.json(files);
 });
 
-app.listen(3000, ()=>{
-    console.log('Server running http://localhost:3000');
-});
+app.listen(3000, () => console.log('Server running http://localhost:3000'));
