@@ -1,19 +1,80 @@
-body{
-font-family: Arial;
-padding:40px;
+
+
+/* ===== General Styles ===== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
-a{
-display:block;
-padding:10px;
-background:#007BFF;
-color:white;
-text-decoration:none;
-margin:5px 0;
-width:300px;
+h1, h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 40px;
 }
 
-button{
-padding:10px;
-margin-top:10px;
+a {
+    display: block;
+    text-decoration: none;
+    color: #2980b9;
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+a:hover {
+    color: #1abc9c;
+    text-decoration: underline;
+}
+
+/* ===== Container Styles ===== */
+#files, .form-container {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+}
+
+/* ===== Inputs and Buttons ===== */
+input[type="text"], input[type="password"], input[type="file"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #1abc9c;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+    #files, .form-container {
+        margin: 10px;
+        padding: 15px;
+    }
+    h1, h2 {
+        font-size: 1.5em;
+    }
+    button {
+        font-size: 14px;
+    }
 }
